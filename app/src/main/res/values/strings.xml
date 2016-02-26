@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Putt Putt Match</string>
+    <string name="log_in">Log in</string>
+    <string name="title_activity_menu">Main menu</string>
+    <string name="new_match">New match</string>
+    <string name="players">Players</string>
+    <string name="create_account">Create new account</string>
+    <string name="title_activity_players">PlayersActivity</string>
+    <string name="title_activity_test">test</string>
+    <string name="add_player">Add player</string>
+    <string name="delete_player_question">Delete this player?</string>
+    <string name="delete_club_question">Delete this club?</string>
+    <string name="edit_player_name">Enter a name</string>
+    <string name="edit_club_name">Enter a name</string>
+    <string name="add_club">Add club</string>
+    <string name="title_activity_choose_players">ChoosePlayersActivity</string>
+</resources>
