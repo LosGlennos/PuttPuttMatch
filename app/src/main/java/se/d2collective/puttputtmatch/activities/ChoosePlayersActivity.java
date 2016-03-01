@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import se.d2collective.puttputtmatch.R;
 import se.d2collective.puttputtmatch.database.queries.PlayerQueries;
@@ -63,12 +64,16 @@ public class ChoosePlayersActivity extends AppCompatActivity {
         for(int i = 0; i < listView.getCount(); i++) {
             View v = listView.getChildAt(i);
             CheckBox cb = (CheckBox) v.findViewById(R.id.choose_player);
-            numberOfPlayersChosen = cb.isChecked() ? numberOfPlayersChosen++ : numberOfPlayersChosen;
+            if (cb.isChecked()) {
+                numberOfPlayersChosen = numberOfPlayersChosen + 1;
+            }
         }
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (numberOfPlayersChosen == 5) {
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.show();
+        } else {
+            fab.hide();
         }
     }
 }

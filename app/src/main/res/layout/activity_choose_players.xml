@@ -21,9 +21,12 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_choose_players"
+    <ListView
+        android:id="@+id/player_choices"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"/>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
