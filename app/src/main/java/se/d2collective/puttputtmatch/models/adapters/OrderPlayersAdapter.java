@@ -50,7 +50,7 @@ public class OrderPlayersAdapter extends DragItemAdapter<Pair<Long, String>, Ord
 
         public ViewHolder(final View itemView) {
             super(itemView, mGrabHandleId);
-            mText = (TextView) itemView.findViewById(R.id.text);
+            mText = (TextView) itemView.findViewById(R.id.player_order_name);
         }
 
         @Override

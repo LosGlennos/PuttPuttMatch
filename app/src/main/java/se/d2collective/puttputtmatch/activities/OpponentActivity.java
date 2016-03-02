@@ -45,18 +45,19 @@ public class OpponentActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String clubName = ((TextView) view.findViewById(R.id.club)).getText().toString();
-                showStartMatchDialog(clubName);
+                showStartMatchDialog(id, clubName);
             }
         });
     }
 
-    private void showStartMatchDialog(String clubName) {
+    private void showStartMatchDialog(final long id, String clubName) {
         AlertDialog.Builder startMatchDialog = new AlertDialog.Builder(OpponentActivity.this);
         startMatchDialog.setMessage("Start match against " + clubName + "?");
         startMatchDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent choosePlayersIntent = new Intent(getBaseContext(), ChoosePlayersActivity.class);
+                choosePlayersIntent.putExtra("clubId", id);
                 startActivity(choosePlayersIntent);
             }
         });
