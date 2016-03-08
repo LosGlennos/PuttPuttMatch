@@ -1,18 +1,14 @@
 package se.d2collective.puttputtmatch.activities;
 
-import android.database.Cursor;
-import android.support.v4.util.Pair;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-
-import com.woxthebox.draglistview.DragListView;
-
-import java.util.ArrayList;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import se.d2collective.puttputtmatch.R;
-import se.d2collective.puttputtmatch.database.queries.PlayerQueries;
-import se.d2collective.puttputtmatch.models.adapters.PlayerCursorAdapter;
+import se.d2collective.puttputtmatch.fragments.OrderPlayersFragment;
 
 public class OrderPlayersActivity extends AppCompatActivity {
 
@@ -22,20 +18,19 @@ public class OrderPlayersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_players);
 
-        Cursor players = new PlayerQueries(this).getAllPlayers();
-        ArrayList<Pair<Long, String>> playersList = new ArrayList<>();
+        final OrderPlayersFragment orderPlayers = new OrderPlayersFragment();
 
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.player_order_list_container, orderPlayers, "fragment").commit();
 
-        DragListView playerOrder = (DragListView) findViewById(R.id.player_order_list);
-        playerOrder.setDragListListener(new DragListView.DragListListener() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.start_game_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemDragStarted(int position) {
-
-            }
-
-            @Override
-            public void onItemDragEnded(int fromPosition, int toPosition) {
-
+            public void onClick(View view) {
+                long matchId = orderPlayers.startGame();
+                Intent matchIntent = new Intent(OrderPlayersActivity.this, MatchActivity.class);
+                matchIntent.putExtra("matchId", matchId);
+                startActivity(matchIntent);
             }
         });
     }

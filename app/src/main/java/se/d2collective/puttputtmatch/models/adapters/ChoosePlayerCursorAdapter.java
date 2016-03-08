@@ -42,7 +42,8 @@ public class ChoosePlayerCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
         TextView tvPlayerName = (TextView) view.findViewById(R.id.player_choice_name);
-        String name = cursor.getString(cursor.getColumnIndexOrThrow(PlayerTableContract.PlayerTable.COLUMN_NAME_PLAYER_NAME));
+        final String name = cursor.getString(cursor.getColumnIndexOrThrow(PlayerTableContract.PlayerTable.COLUMN_NAME_PLAYER_NAME));
+        final long playerId = cursor.getLong(cursor.getColumnIndexOrThrow(PlayerTableContract.PlayerTable._ID));
         tvPlayerName.setText(name);
 
         view.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +52,7 @@ public class ChoosePlayerCursorAdapter extends CursorAdapter {
                 CheckBox playerCheckBox = (CheckBox) v.findViewById(R.id.choose_player);
                 playerCheckBox.performClick();
                 ((ChoosePlayersActivity) context).showOrHideFab();
+                ((ChoosePlayersActivity) context).addOrDeletePlayerFromList(playerId, name);
             }
         });
     }
