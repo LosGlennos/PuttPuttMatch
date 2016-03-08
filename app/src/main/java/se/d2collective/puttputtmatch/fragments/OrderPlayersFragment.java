@@ -72,9 +72,9 @@ public class OrderPlayersFragment extends android.support.v4.app.Fragment {
         mDragListView.setCustomDragItem(new MyDragItem(getActivity().getBaseContext(), R.layout.player_order_row));
     }
 
-    public void startGame() {
+    public long startGame() {
         List<Pair<Long, String>> playersList = mOrderPlayersAdapter.getItemList();
-        boolean success = new MatchCommands(getActivity().getBaseContext()).startGame(playersList, mOpponentId);
+        return new MatchCommands(getActivity().getBaseContext()).startGame(playersList, mOpponentId);
     }
 
     private static class MyDragItem extends DragItem {

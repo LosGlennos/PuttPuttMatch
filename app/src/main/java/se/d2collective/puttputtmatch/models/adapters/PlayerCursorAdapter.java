@@ -121,7 +121,7 @@ public class PlayerCursorAdapter extends CursorAdapter {
                     }
                 });
 
-                builder.show();
+            builder.show();
             }
         });
     }
