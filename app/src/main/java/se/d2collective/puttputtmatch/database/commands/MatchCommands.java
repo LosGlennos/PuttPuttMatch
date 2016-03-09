@@ -2,6 +2,7 @@ package se.d2collective.puttputtmatch.database.commands;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.util.Pair;
 
@@ -10,6 +11,7 @@ import java.util.List;
 import se.d2collective.puttputtmatch.database.DatabaseConnection;
 import se.d2collective.puttputtmatch.database.tables.MatchPlayerTableContract;
 import se.d2collective.puttputtmatch.database.tables.MatchTableContract;
+import se.d2collective.puttputtmatch.database.tables.PlayerTableContract;
 
 /**
  * Created by msve on 2016-03-02.
@@ -38,6 +40,9 @@ public class MatchCommands {
                 values.put(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_MATCH_ID, matchId);
                 values.put(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_FINISHED_PLAYING, 0);
                 values.put(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_POSITION, i + 1);
+                values.put(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_DIFFERENCE, 0);
+                values.put(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_SCORE, 0);
+                values.put(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_SUBSTITUTED_TYPE, 0);
                 long matchPlayerId = db.insert(MatchPlayerTableContract.MatchPlayerTable.TABLE_NAME, null, values);
                 if (matchPlayerId != -1) {
                     values.clear();
@@ -52,5 +57,31 @@ public class MatchCommands {
         }
 
         return matchId;
+    }
+
+    public int updateScoreForPlayer(long matchId, long playerId, int amount) {
+        SQLiteDatabase db = mDbConnection.getReadableDatabase();
+
+        String sqlQuery = "SELECT " + MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_DIFFERENCE + " FROM " + MatchPlayerTableContract.MatchPlayerTable.TABLE_NAME +
+                            " WHERE " + MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_MATCH_ID + " = ?" +
+                            " AND " + MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(sqlQuery, new String[]{matchId + "", playerId + ""});
+        if( cursor != null && cursor.moveToFirst() ) {
+            int playerDifference = cursor.getInt(cursor.getColumnIndex(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_DIFFERENCE));
+            playerDifference += amount;
+
+            ContentValues values = new ContentValues();
+            values.put(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_DIFFERENCE, playerDifference);
+
+            String selection = MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_MATCH_ID + " LIKE ? " +
+                    "AND " + MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_ID + " LIKE ?";
+            String[] selectionArgs = { String.valueOf(matchId), String.valueOf(playerId) };
+
+            db.update(MatchPlayerTableContract.MatchPlayerTable.TABLE_NAME, values, selection, selectionArgs);
+
+            return playerDifference;
+        }
+        return 0;
     }
 }

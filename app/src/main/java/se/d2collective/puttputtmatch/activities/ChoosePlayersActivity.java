@@ -91,16 +91,18 @@ public class ChoosePlayersActivity extends AppCompatActivity {
 
     public void addOrDeletePlayerFromList(long playerId, String name) {
         Player player = new Player(playerId, name);
+        boolean exists = false;
 
-        if (mPlayersList.contains(player)) {
-            for (int i = 0; i < mPlayersList.size(); i++) {
-                Player playerInList = mPlayersList.get(i);
-                if (playerInList.getId() == playerId) {
-                    mPlayersList.remove(i);
-                    break;
-                }
+        for(int i = 0; i < mPlayersList.size(); i++) {
+            Player listPlayer = mPlayersList.get(i);
+            if (listPlayer.getId() == playerId) {
+                mPlayersList.remove(i);
+                exists = true;
+                break;
             }
-        } else {
+        }
+
+        if (!exists) {
             mPlayersList.add(player);
         }
     }
