@@ -55,20 +55,14 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
                 playerFabPlus.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                    int playerDifference = mMatchCommands.updateScoreForPlayer(matchId, playerId, 1);
-                    String scoreString = playerDifference > 0 ? "+" + playerDifference : playerDifference + "";
-                    playerScore.setText(scoreString);
-                    ((MatchActivity)mContext).addOneToTotalScore();
+                        updatePlayerScore(playerId, matchId, playerScore, 1);
                     }
                 });
 
                 playerFabMinus.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int playerDifference = mMatchCommands.updateScoreForPlayer(matchId, playerId, -1);
-                        String scoreString = playerDifference > 0 ? "+" + playerDifference : playerDifference + "";
-                        playerScore.setText(scoreString);
-                        ((MatchActivity)mContext).deductOneFromTotalScore();
+                        updatePlayerScore(playerId, matchId, playerScore, -1);
                     }
                 });
 
@@ -76,27 +70,44 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
                 playerOptions.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                        builder.setTitle("Select an option")
-                                .setItems(R.array.match_player_options, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (which == 0) {
-                                            Intent substitutePlayerIntent = new Intent(mContext, SubstitutePlayerActivity.class);
-                                            substitutePlayerIntent.putExtra("matchId", matchId);
-                                            substitutePlayerIntent.putExtra("playerId", playerId);
-                                            mContext.startActivity(substitutePlayerIntent);
-                                        } else if (which == 1) {
-                                            //Complete match
-                                        }
-                                    }
-                                });
-                        Dialog dialog = builder.create();
-                        dialog.show();
+                        showPlayerOptions(matchId, playerId);
                     }
                 });
             }
         };
     }
+
+    private void updatePlayerScore(long playerId, long matchId, TextView playerScore, int difference) {
+        int playerDifference = mMatchCommands.updateScoreForPlayer(matchId, playerId, difference);
+        String scoreString = playerDifference > 0 ? "+" + playerDifference : playerDifference + "";
+        playerScore.setText(scoreString);
+        ((MatchActivity) mContext).updateTotalScore(difference);
+    }
+
+    private void showPlayerOptions(final long matchId, final long playerId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("Select an option")
+                .setItems(R.array.match_player_options, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Intent substitutePlayerIntent = new Intent(mContext, SubstitutePlayerActivity.class);
+                                substitutePlayerIntent.putExtra("matchId", matchId);
+                                substitutePlayerIntent.putExtra("playerId", playerId);
+                                mContext.startActivity(substitutePlayerIntent);
+                                break;
+                            case 1:
+                                //TODO: Complete match
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+        Dialog dialog = builder.create();
+        dialog.show();
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         View v1;

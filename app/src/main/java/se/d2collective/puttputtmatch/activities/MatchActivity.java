@@ -36,14 +36,8 @@ public class MatchActivity extends Activity {
         matchRecyclerView.setAdapter(adapter);
     }
 
-    public void addOneToTotalScore() {
-        mTotalScore += 1;
-        String totalScoreString = mTotalScore > 0 ? "+" + mTotalScore : mTotalScore + "";
-        mTotalScoreView.setText(totalScoreString);
-    }
-
-    public void deductOneFromTotalScore() {
-        mTotalScore -= 1;
+    public void updateTotalScore(int difference) {
+        mTotalScore += difference;
         String totalScoreString = mTotalScore > 0 ? "+" + mTotalScore : mTotalScore + "";
         mTotalScoreView.setText(totalScoreString);
     }
