@@ -9,6 +9,7 @@ import android.support.v4.util.Pair;
 import java.util.List;
 
 import se.d2collective.puttputtmatch.database.DatabaseConnection;
+import se.d2collective.puttputtmatch.database.queries.MatchQueries;
 import se.d2collective.puttputtmatch.database.tables.MatchPlayerTableContract;
 import se.d2collective.puttputtmatch.database.tables.MatchTableContract;
 import se.d2collective.puttputtmatch.database.tables.PlayerTableContract;
@@ -18,9 +19,10 @@ import se.d2collective.puttputtmatch.database.tables.PlayerTableContract;
  */
 public class MatchCommands {
     DatabaseConnection mDbConnection;
-
+    Context mContext;
     public MatchCommands(Context context) {
         mDbConnection = new DatabaseConnection(context);
+        mContext = context;
     }
 
     public long startGame(List<Pair<Long, String>> playersList, long opponentId) {
@@ -83,5 +85,25 @@ public class MatchCommands {
             return playerDifference;
         }
         return 0;
+    }
+
+    public boolean substitutePlayer(long matchId, long playerToBeSubstitutedId, long playerInId) {
+        String playerPosition = new MatchQueries(mContext).getPlayerPositionForMatchId(matchId, playerToBeSubstitutedId);
+
+        SQLiteDatabase db = mDbConnection.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_ID, playerInId);
+        values.put(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_MATCH_ID, matchId);
+        values.put(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_FINISHED_PLAYING, 0);
+        values.put(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_POSITION, playerPosition);
+        values.put(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_DIFFERENCE, 0);
+        values.put(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_SCORE, 0);
+        values.put(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_SUBSTITUTED_TYPE, 2);
+        db.insert(MatchPlayerTableContract.MatchPlayerTable.TABLE_NAME, null, values);
+
+
+
+        return false;
     }
 }
