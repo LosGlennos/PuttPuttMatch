@@ -2,6 +2,7 @@ package se.d2collective.puttputtmatch.database.queries;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class MatchQueries {
     public Cursor getPlayersForMatch(long matchId) {
         SQLiteDatabase db = mDbConnection.getReadableDatabase();
 
-        String sqlQuery = "SELECT * FROM MatchPlayer m JOIN Players p ON m.PlayerId = p._id WHERE m.MatchId=?";
+        String sqlQuery = "SELECT * FROM MatchPlayer m JOIN Players p ON m.PlayerId = p._id WHERE m.MatchId=? ORDER BY m.PlayerPosition ASC";
         return db.rawQuery(sqlQuery, new String[]{String.valueOf(matchId)});
     }
 
@@ -54,6 +55,38 @@ public class MatchQueries {
         Cursor playerPositionCursor = db.rawQuery(sqlQuery, new String[]{String.valueOf(playerId), String.valueOf(matchId)});
         if (playerPositionCursor != null && playerPositionCursor.moveToFirst()) {
             return playerPositionCursor.getString(playerPositionCursor.getColumnIndex(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_POSITION));
+        }
+        return "";
+    }
+
+    public boolean hasSubstituted(long matchId) {
+        SQLiteDatabase db = mDbConnection.getReadableDatabase();
+        String sqlQuery = "SELECT PlayerSubstitutedType FROM MatchPlayer WHERE MatchId LIKE " + matchId + " AND PlayerSubstitutedType NOT LIKE 0";
+        return db.rawQuery(sqlQuery, null).getCount() != 0;
+    }
+
+    public boolean hasFinishedPlaying(long matchId, long playerId) {
+        SQLiteDatabase db = mDbConnection.getReadableDatabase();
+        String sqlQuery = "SELECT PlayerFinished FROM MatchPlayer WHERE MatchId LIKE " + matchId + " AND PlayerId LIKE " + playerId + " AND PlayerFinished LIKE 1";
+        return db.rawQuery(sqlQuery, null).getCount() != 0;
+    }
+
+    public String getPlayerDifference(long matchId, long playerId) {
+        SQLiteDatabase db = mDbConnection.getReadableDatabase();
+        String sqlQuery = "SELECT PlayerScoreDifference FROM MatchPlayer WHERE MatchId = ? AND PlayerId = ?";
+        Cursor playerDifferenceCursor = db.rawQuery(sqlQuery, new String[]{String.valueOf(matchId), String.valueOf(playerId)});
+        if (playerDifferenceCursor != null && playerDifferenceCursor.moveToFirst()) {
+            return playerDifferenceCursor.getString(playerDifferenceCursor.getColumnIndex(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_DIFFERENCE));
+        }
+        return "0";
+    }
+
+    public String getPlayerScore(long matchId, long playerId) {
+        SQLiteDatabase db = mDbConnection.getReadableDatabase();
+        String sqlQuery = "SELECT PlayerScore FROM MatchPlayer WHERE MatchId = ? AND PlayerId = ?";
+        Cursor playerScoreCursor = db.rawQuery(sqlQuery, new String[]{String.valueOf(matchId), String.valueOf(playerId)});
+        if (playerScoreCursor != null && playerScoreCursor.moveToFirst()) {
+            return playerScoreCursor.getString(playerScoreCursor.getColumnIndex(MatchPlayerTableContract.MatchPlayerTable.COLUMN_NAME_PLAYER_SCORE));
         }
         return "";
     }

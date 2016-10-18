@@ -53,8 +53,11 @@ public class SubstitutePlayerActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 boolean substitutionSuccess = new MatchCommands(SubstitutePlayerActivity.this.getBaseContext()).substitutePlayer(mMatchId, mPlayerId, id);
-                                Intent matchActivity = new Intent(SubstitutePlayerActivity.this, MatchActivity.class);
-                                matchActivity.putExtra("matchId", mMatchId);
+                                if (substitutionSuccess) {
+                                    Intent matchActivity = new Intent(SubstitutePlayerActivity.this, MatchActivity.class);
+                                    matchActivity.putExtra("matchId", mMatchId);
+                                    startActivity(matchActivity);
+                                }
                             }
                         })
                         .setNegativeButton("NO", new DialogInterface.OnClickListener() {

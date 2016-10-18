@@ -36,7 +36,8 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".activities.SubstitutePlayerActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".activities.ResumeGameActivity"></activity>
     </application>
 
 </manifest>
