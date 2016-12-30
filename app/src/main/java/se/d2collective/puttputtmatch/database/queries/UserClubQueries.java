@@ -5,21 +5,23 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import se.d2collective.puttputtmatch.database.DatabaseConnection;
+import se.d2collective.puttputtmatch.database.tables.UserClubTableContract;
 
 /**
- * Created by msve on 2016-03-08.
+ * Created by Martin on 2016-12-30.
  */
-public class MatchQueries {
+
+public class UserClubQueries {
     private final DatabaseConnection mDbConnection;
 
-    public MatchQueries(Context context) {
+    public UserClubQueries(Context context) {
         mDbConnection = DatabaseConnection.getInstance(context);
     }
 
-    public Cursor getPlayersForMatch(long matchId) {
+    public Cursor getUserClub() {
         SQLiteDatabase db = mDbConnection.getReadableDatabase();
 
-        String sqlQuery = "SELECT * FROM MatchPlayer m JOIN Players p ON m.PlayerId = p._id WHERE m.MatchId=?";
-        return db.rawQuery(sqlQuery, new String[]{String.valueOf(matchId)});
+        String sqlQuery = "SELECT * FROM UserClub";
+        return db.rawQuery(sqlQuery, new String[] {});
     }
 }

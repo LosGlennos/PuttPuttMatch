@@ -20,7 +20,7 @@ public class MatchCommands {
     DatabaseConnection mDbConnection;
 
     public MatchCommands(Context context) {
-        mDbConnection = new DatabaseConnection(context);
+        mDbConnection = DatabaseConnection.getInstance(context);
     }
 
     public long startGame(List<Pair<Long, String>> playersList, long opponentId) {

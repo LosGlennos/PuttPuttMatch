@@ -15,7 +15,7 @@ public class ClubCommands {
     private DatabaseConnection mDbConnection;
 
     public ClubCommands(Context context) {
-        this.mDbConnection = new DatabaseConnection(context);
+        this.mDbConnection = DatabaseConnection.getInstance(context);
     }
 
     public boolean deleteClubById(long id) {

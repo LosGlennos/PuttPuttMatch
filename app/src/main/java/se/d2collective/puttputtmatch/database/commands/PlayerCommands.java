@@ -14,7 +14,7 @@ public class PlayerCommands {
     DatabaseConnection mDbConnection;
 
     public PlayerCommands(Context context) {
-        this.mDbConnection = new DatabaseConnection(context);
+        this.mDbConnection = DatabaseConnection.getInstance(context);
     }
 
     public boolean deletePlayerById(long id) {

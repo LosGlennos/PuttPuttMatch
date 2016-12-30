@@ -8,20 +8,30 @@ import se.d2collective.puttputtmatch.database.tables.ClubTableContract;
 import se.d2collective.puttputtmatch.database.tables.MatchPlayerTableContract;
 import se.d2collective.puttputtmatch.database.tables.MatchTableContract;
 import se.d2collective.puttputtmatch.database.tables.PlayerTableContract;
+import se.d2collective.puttputtmatch.database.tables.UserClubTableContract;
 
 /**
  * Created by msve on 2016-02-24.
  */
 public class DatabaseConnection extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "dbPuttPutt";
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
+    public static DatabaseConnection sInstance;
 
-    public DatabaseConnection(Context context) {
+    private DatabaseConnection(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static synchronized DatabaseConnection getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new DatabaseConnection(context.getApplicationContext());
+        }
+        return sInstance;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(createUserClubTableString());
         db.execSQL(createPlayersTableString());
         db.execSQL(createClubTableString());
         db.execSQL(createMatchTableString());
@@ -35,6 +45,12 @@ public class DatabaseConnection extends SQLiteOpenHelper {
         db.execSQL(dropTablesMatchPlayer());
         db.execSQL(dropTablesPlayers());
         onCreate(db);
+    }
+
+    private String createUserClubTableString() {
+        return "CREATE TABLE IF NOT EXISTS " + UserClubTableContract.UserClubTable.TABLE_NAME + " (" +
+                PlayerTableContract.PlayerTable._ID + " INTEGER PRIMARY KEY," +
+                UserClubTableContract.UserClubTable.COLUMN_NAME_CLUB_NAME + " TEXT NOT NULL)";
     }
 
     private String createPlayersTableString() {
@@ -82,7 +98,12 @@ public class DatabaseConnection extends SQLiteOpenHelper {
     private String dropTablesPlayers() {
         return "DROP TABLE IF EXISTS " + PlayerTableContract.PlayerTable.TABLE_NAME;
     }
+
     private String dropTablesClubs() {
         return "DROP TABLE IF EXISTS " + ClubTableContract.ClubTable.TABLE_NAME;
+    }
+
+    private String dropTablesUserClub() {
+        return "DROP TABLE IF EXISTS " + UserClubTableContract.UserClubTable.TABLE_NAME;
     }
 }

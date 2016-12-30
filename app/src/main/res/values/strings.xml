@@ -14,4 +14,7 @@
     <string name="edit_club_name">Enter a name</string>
     <string name="add_club">Add club</string>
     <string name="title_activity_choose_players">ChoosePlayersActivity</string>
+    <string name="welcome">Welcome!</string>
+    <string name="enter_your_club_name">Enter your club name:</string>
+    <string name="start_playing">Start playing</string>
 </resources>

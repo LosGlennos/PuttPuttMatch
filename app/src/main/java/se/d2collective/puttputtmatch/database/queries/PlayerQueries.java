@@ -14,7 +14,7 @@ public class PlayerQueries {
     private DatabaseConnection mDbConnection;
 
     public PlayerQueries(Context context) {
-        mDbConnection = new DatabaseConnection(context);
+        mDbConnection = DatabaseConnection.getInstance(context);
     }
 
     public Cursor getAllPlayers() {

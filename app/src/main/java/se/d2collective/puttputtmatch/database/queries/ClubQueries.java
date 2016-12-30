@@ -15,7 +15,7 @@ public class ClubQueries {
     private final DatabaseConnection mDbConnection;
 
     public ClubQueries(Context context) {
-        mDbConnection = new DatabaseConnection(context);
+        mDbConnection = DatabaseConnection.getInstance(context);
     }
 
     public Cursor getAllClubs() {
