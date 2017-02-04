@@ -36,4 +36,12 @@ public class PlayerQueries {
                 sortOrder
         );
     }
+
+    public Cursor getPlayerById(long id) {
+        SQLiteDatabase db = mDbConnection.getReadableDatabase();
+
+        String sqlQuery = "SELECT * FROM Players WHERE _id = ?";
+
+        return db.rawQuery(sqlQuery, new String[]{String.valueOf(id)});
+    }
 }

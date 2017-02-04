@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="match_player_options">
+        <item>Substitute player</item>
+        <item>Complete match for player</item>
+    </string-array>
+</resources>

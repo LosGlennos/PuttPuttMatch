@@ -20,7 +20,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/players"
-        android:layout_below="@id/startNewMatchButton"
-        android:onClick="showPlayers"/>
+        android:onClick="showPlayers"
+        android:id="@+id/button"
+        android:layout_below="@+id/button2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Resume match"
+        android:onClick="resumeGame"
+        android:id="@+id/button2"
+        android:layout_below="@+id/startNewMatchButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

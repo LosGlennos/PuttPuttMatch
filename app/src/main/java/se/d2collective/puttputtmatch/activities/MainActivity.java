@@ -23,4 +23,9 @@ public class MainActivity extends AppCompatActivity {
         Intent showPlayersIntent = new Intent(this, PlayersActivity.class);
         startActivity(showPlayersIntent);
     }
+
+    public void resumeGame(View view) {
+        Intent resumeGameIntent = new Intent(this, ResumeGameActivity.class);
+        startActivity(resumeGameIntent);
+    }
 }
